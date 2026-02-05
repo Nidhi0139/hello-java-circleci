@@ -1,22 +1,25 @@
 version: 2.1
 
-# ---- PARAMETERS SECTION ----
-parameters:
-  USERNAME:
-    type: string
-    default: "Student"
-
 jobs:
-  parameter-job:
+  java-build:
     docker:
-      - image: cimg/base:stable
-      
+      - image: cimg/openjdk:17.0
+
     steps:
+      # Get source from Git
+      - checkout
+
+      # Compile Java
       - run:
-          name: Print Username Parameter
-          command: echo "Username = Srinidhi"
+          name: Compile Java
+          command: javac Hello.java
+
+      # Run Java program
+      - run:
+          name: Run Java
+          command: java Hello
 
 workflows:
-  param-workflow:
+  java-workflow:
     jobs:
-      - parameter-job
+      - java-build

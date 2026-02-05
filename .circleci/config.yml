@@ -1,25 +1,29 @@
 version: 2.1
 
 jobs:
-  java-build:
+  java-artifact:
     docker:
       - image: cimg/openjdk:17.0
 
     steps:
-      # Get source from Git
       - checkout
 
-      # Compile Java
+      # Compile Java → generates Hello.class
       - run:
           name: Compile Java
           command: javac Hello.java
 
-      # Run Java program
+      # Run program
       - run:
-          name: Run Java
+          name: Execute Java
           command: java Hello
 
+      # ---- ARCHIVE ARTIFACT ----
+      - store_artifacts:
+          path: Hello.class
+          destination: java-output
+
 workflows:
-  java-workflow:
+  artifact-workflow:
     jobs:
-      - java-build
+      - java-artifact

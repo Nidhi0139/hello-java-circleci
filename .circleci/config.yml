@@ -1,25 +1,27 @@
 version: 2.1
 
 jobs:
-  hello:
+  workspace-job:
     docker:
       - image: cimg/base:stable
 
     steps:
-      # STEP 1 – GET SOURCE CODE
-      - checkout
-
-      # STEP 2 – VERIFY FILES
+      # 1. Create file inside workspace
       - run:
-          name: List source files
-          command: ls -R
+          name: Create text file
+          command: echo "This file is created in CircleCI workspace" > demo.txt
 
-      # STEP 3 – Print message
+      # 2. Display file contents
       - run:
-          name: Print message
-          command: echo "Hello CircleCI"
+          name: Show file content
+          command: cat demo.txt
+
+      # 3. List workspace files
+      - run:
+          name: Verify workspace
+          command: ls -l
 
 workflows:
-  say-hello:
+  workspace-workflow:
     jobs:
-      - hello
+      - workspace-job

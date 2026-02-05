@@ -1,29 +1,41 @@
 version: 2.1
 
 jobs:
-  java-artifact:
+  checkout-stage:
     docker:
-      - image: cimg/openjdk:17.0
-
+      - image: cimg/base:stable
     steps:
       - checkout
+      - run:
+          name: Verify Source
+          command: ls -R
 
-      # Compile Java → generates Hello.class
+  build-stage:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - checkout
       - run:
           name: Compile Java
           command: javac Hello.java
 
-      # Run program
+  test-stage:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - checkout
       - run:
-          name: Execute Java
+          name: Run Program as Test
           command: java Hello
 
-      # ---- ARCHIVE ARTIFACT ----
-      - store_artifacts:
-          path: Hello.class
-          destination: java-output
-
+# ---- PIPELINE WORKFLOW ----
 workflows:
-  artifact-workflow:
+  simple-pipeline:
     jobs:
-      - java-artifact
+      - checkout-stage
+      - build-stage:
+          requires:
+            - checkout-stage
+      - test-stage:
+          requires:
+            - build-stage

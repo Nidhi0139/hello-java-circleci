@@ -1,34 +1,31 @@
 version: 2.1
 
 jobs:
-  checkout-stage:
+  post-build-job:
     docker:
       - image: cimg/base:stable
+
     steps:
       - checkout
 
-  build-stage:
-    docker:
-      - image: cimg/openjdk:17.0
-    steps:
-      - checkout
-      - run: javac Hello.java
+      # Main step
+      - run:
+          name: Main Task
+          command: echo "Executing main build step"
 
-  test-stage:
-    docker:
-      - image: cimg/openjdk:17.0
-    steps:
-      - checkout
-      - run: javac Hello.java
-      - run: java Hello
+      # ----- POST BUILD ACTIONS -----
+
+      - run:
+          name: On Success Message
+          when: on_success
+          command: echo "BUILD SUCCESS – Pipeline completed successfully"
+
+      - run:
+          name: On Failure Message
+          when: on_fail
+          command: echo "BUILD FAILED – Check errors"
 
 workflows:
-  simple-pipeline:
+  post-build-workflow:
     jobs:
-      - checkout-stage
-      - build-stage:
-          requires:
-            - checkout-stage
-      - test-stage:
-          requires:
-            - build-stage
+      - post-build-job

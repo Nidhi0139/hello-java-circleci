@@ -1,27 +1,22 @@
 version: 2.1
 
+# ---- PARAMETERS SECTION ----
+parameters:
+  USERNAME:
+    type: string
+    default: "Student"
+
 jobs:
-  workspace-job:
+  parameter-job:
     docker:
       - image: cimg/base:stable
 
     steps:
-      # 1. Create file inside workspace
       - run:
-          name: Create text file
-          command: echo "This file is created in CircleCI workspace" > demo.txt
-
-      # 2. Display file contents
-      - run:
-          name: Show file content
-          command: cat demo.txt
-
-      # 3. List workspace files
-      - run:
-          name: Verify workspace
-          command: ls -l
+          name: Print Username Parameter
+          command: echo "Username = Srinidhi"
 
 workflows:
-  workspace-workflow:
+  param-workflow:
     jobs:
-      - workspace-job
+      - parameter-job

@@ -6,29 +6,22 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - run:
-          name: Verify Source
-          command: ls -R
 
   build-stage:
     docker:
       - image: cimg/openjdk:17.0
     steps:
       - checkout
-      - run:
-          name: Compile Java
-          command: javac Hello.java
+      - run: javac Hello.java
 
   test-stage:
     docker:
       - image: cimg/openjdk:17.0
     steps:
       - checkout
-      - run:
-          name: Run Program as Test
-          command: java Hello
+      - run: javac Hello.java
+      - run: java Hello
 
-# ---- PIPELINE WORKFLOW ----
 workflows:
   simple-pipeline:
     jobs:

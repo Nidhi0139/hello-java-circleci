@@ -1,12 +1,24 @@
 version: 2.1
+
 jobs:
   hello:
     docker:
       - image: cimg/base:stable
+
     steps:
+      # STEP 1 – GET SOURCE CODE
+      - checkout
+
+      # STEP 2 – VERIFY FILES
+      - run:
+          name: List source files
+          command: ls -R
+
+      # STEP 3 – Print message
       - run:
           name: Print message
           command: echo "Hello CircleCI"
+
 workflows:
   say-hello:
     jobs:

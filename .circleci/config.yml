@@ -1,3 +1,41 @@
-   -run:
-       name: verify clean worspace
-       command:ls
+version: 2.1
+
+jobs:
+  mini-ci:
+    docker:
+      - image: cimg/openjdk:17.0
+
+    steps:
+      # 1. Git checkout
+      - checkout
+
+      # 2. Compile code
+      - run:
+          name: Compile Java
+          command: javac Hello.java
+
+      # 3. Run program
+      - run:
+          name: Execute Program
+          command: java Hello
+
+      # 4. Archive artifact
+      - store_artifacts:
+          path: Hello.class
+          destination: build-output
+
+      # 5. Post build messages
+      - run:
+          name: Success Message
+          when: on_success
+          command: echo "CI Pipeline Completed Successfully"
+
+      - run:
+          name: Failure Message
+          when: on_fail
+          command: echo "Build Failed – Compilation Error"
+
+workflows:
+  mini-ci-workflow:
+    jobs:
+      - mini-ci

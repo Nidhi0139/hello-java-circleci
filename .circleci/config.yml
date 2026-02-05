@@ -1,31 +1,26 @@
 version: 2.1
 
 jobs:
-  post-build-job:
+  job-A:
     docker:
       - image: cimg/base:stable
-
     steps:
-      - checkout
-
-      # Main step
       - run:
-          name: Main Task
-          command: echo "Executing main build step"
+          name: Job A Step
+          command: echo "This is Job A"
 
-      # ----- POST BUILD ACTIONS -----
-
+  job-B:
+    docker:
+      - image: cimg/base:stable
+    steps:
       - run:
-          name: On Success Message
-          when: on_success
-          command: echo "BUILD SUCCESS – Pipeline completed successfully"
-
-      - run:
-          name: On Failure Message
-          when: on_fail
-          command: echo "BUILD FAILED – Check errors"
+          name: Job B Step
+          command: echo "This is Job B – Triggered after Job A"
 
 workflows:
-  post-build-workflow:
+  chaining-workflow:
     jobs:
-      - post-build-job
+      - job-A
+      - job-B:
+          requires:
+            - job-A

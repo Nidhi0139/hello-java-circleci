@@ -1,26 +1,3 @@
-version: 2.1
-
-jobs:
-  job-A:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - run:
-          name: Job A Step
-          command: echo "This is Job A"
-
-  job-B:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - run:
-          name: Job B Step
-          command: echo "This is Job B – Triggered after Job A"
-
-workflows:
-  chaining-workflow:
-    jobs:
-      - job-A
-      - job-B:
-          requires:
-            - job-A
+   -run:
+       name: verify clean worspace
+       command:ls
